@@ -1,0 +1,265 @@
+\documentclass[11pt,a4paper]{amsart}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb}
+\usepackage[hmargin=1in,vmargin=.9in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={Skeptical inference from strongly stable source integrations}}
+\DeclareFontShape{OT1}{cmr}{bx}{n}{<-> cmbx10}{}
+\DeclareMathSizes{8}{8}{8}{8}
+\DeclareMathSizes{9}{9}{8}{8}
+\DeclareMathSizes{10.95}{10.95}{8}{8}
+\newtheorem{theorem}{Theorem}
+\title{Skeptical inference from strongly stable source integrations}
+\date{}
+\begin{document}
+\begin{abstract}
+For finite propositional sources, deciding whether every maximal
+consistent integration of every strongly stable tripartition entails
+a query is \(\Pi_3^{\mathrm P}\)-complete. Hardness persists for a
+literal query on instances that always admit a strongly stable
+tripartition. All three reliability tiers can be required nonempty,
+the sources disjoint with at most three formulas each, and every
+formula individually satisfiable. The hardness uses the common
+quantified-Boolean gadget from the companion existence proof and
+a marker that always supplies a stable integration.
+\end{abstract}
+\maketitle
+
+\section{Source integrations}
+
+Let \(S_1,\ldots,S_n\) be finite nonempty sets of propositional
+formulas. A source tripartition \(T=(R\mid P\mid U)\) divides them
+into reliable, partly reliable, and unreliable tiers in that order.
+Flatten each tier to the union \(P_j\) of its sources. Write \(F\)
+for the union of all input formulas. A maxcon of \(T\) is a
+consistent \(M\subseteq F\) such that \(M\) restricted to each
+priority prefix \(\bigcup_{j\le k}P_j\) is inclusion-maximal
+consistent in that prefix. Every tripartition has a maxcon,
+by adding an inclusion-maximal consistent set at each tier in turn.
+
+A maxcon induces a tripartition by counting the formulas in each
+source individually consistent with it. All, some but not all, and
+none place a source in \(R,P,U\), respectively. Since \(M\) is
+maximal in the full union, an input formula is individually
+consistent with \(M\) precisely when it belongs to \(M\). A
+tripartition is strongly stable when all its maxcons induce it.
+These are Liberatore's definitions \cite[Defs.~1--4 and 11]{lib}.
+His Sections 7.1 and 8.6 give the inference question considered here.
+We ask whether all maxcons of all strongly stable tripartitions
+entail a given formula. The universal statement is true when
+there is no such tripartition.
+
+\begin{theorem}
+Skeptical inference from strongly stable source tripartitions is
+\(\Pi_3^{\mathrm P}\)-complete under polynomial-time many-one
+reductions. Hardness persists when a strongly stable tripartition
+is guaranteed to exist and the query is a literal. The hardness
+instances can require nonempty tiers, disjoint sources of size at
+most three, and individual satisfiability of every input formula.
+\end{theorem}
+
+\section{Truth sets and the upper bound}
+
+For a valuation \(v\) on the input and query variables, let \(A(v)\)
+be the set of input formulas true at \(v\). The first priority
+block on which \(A(w)\) and \(A(v)\) differ determines dominance:
+\(w\succ_T v\) when \(A(w)\) contains strictly more formulas
+by inclusion on that block. A first block with incomparable sets
+gives no dominance. If there is no differing block there is no
+strict dominance.
+
+A maxcon is \(A(v)\) for each of its models, by full maximality.
+If \(w\succ_T v\), then \(A(w)\) has a consistent strict extension
+of \(A(v)\) at the first differing prefix. Conversely, a consistent
+strict extension at a prefix has a model \(w\) containing all
+formulas in \(A(v)\) on that prefix and at least one more.
+Its first differing block witnesses \(w\succ_T v\).
+Thus the maxcons are exactly the undominated truth sets. Formula
+evaluation, dominance, and the tripartition induced by a maxcon
+are polynomial-time checks on valuations.
+
+To falsify skeptical entailment, guess \(T,v\) with \(v\) falsifying
+the query. Universally choose a candidate dominator \(u\) of \(v\)
+and a valuation \(b\) whose truth set may disagree with \(T\).
+Require that \(u\) does not dominate \(v\). Whenever \(A(b)\)
+induces a different source classification, require an existential
+witness \(w\succ_T b\). The classification by membership can be
+evaluated on every truth set, and only its values on maxcons are
+required for stability. Formally the quantifier prefix is
+\(\exists T,v\,\forall u,b\,\exists w\), with the polynomial-time
+checks above. This characterizes the complement. An undominated
+\(v\) gives a maxcon with a model falsifying the query, and the
+second check ensures strong stability. The problem is therefore
+in \(\Pi_3^{\mathrm P}\).
+
+\section{The common quantified-Boolean gadget}
+
+The following construction is the shared Q621 existence reduction
+\cite{existence}. We include it to give both inference reductions
+in full. Start with an input \(\exists x\,\forall y\,\exists z\,\Phi_0\).
+Add a fresh outer bit \(s\) and a fresh universal bit \(t\), and
+use \(\Phi=\Phi_0\lor(s\land t)\). Truth is unchanged because the
+universal choice \(t=0\) forces the original requirement. The new
+matrix is satisfiable somewhere, by \(s=t=1\). Fold these bits into
+their corresponding blocks \(x\) and \(y\).
+
+There are two singleton sources \(\{X_i^0\},\{X_i^1\}\) per outer
+bit, a source \(\{Y_j^0,Y_j^1\}\) per universal bit, one arm
+source \(\{A,A',C\}\), and one dummy source \(\{B_0,B_1\}\).
+Use a two-bit mode taking four values \(\mathrm{Good},\mathrm{Bad}_0,
+\mathrm{Bad}_1,\mathrm{Repair}\).
+For \(X_i^d,Y_j^d\) use the bit test for value \(d\), conjoined with
+the validity condition \(\mathrm{mode}\ne\mathrm{Repair}\lor\Phi\).
+Formula \(A\) holds on either bad mode or a valid repair.
+Formula \(A'\) holds only on good mode, \(C\) only on valid
+repair, and \(B_d\) only on \(\mathrm{Bad}_d\).
+Distinct syntactic tautological tags can preserve disjointness;
+these formulas are polynomial in the input size.
+
+Writing \(D(x,y)\) for the selected bit labels, the nonempty truth
+sets are
+\[
+\begin{array}{c|l}
+\mathrm{Good} & D(x,y)\cup\{A'\}\\
+\mathrm{Bad}_d & D(x,y)\cup\{A,B_d\},\quad d=0,1\\
+\mathrm{Repair} & D(x,y)\cup\{A,C\}\quad
+                   \text{when some }z\text{ satisfies }\Phi(x,y,z).
+\end{array}
+\]
+An invalid repair has the empty truth set, dominated for every
+tripartition. Each listed nonempty truth set is maximal in the
+plain union, since distinct bit selections are incomparable and,
+at fixed bits, the marker sets are incomparable.
+
+The good and repair sets induce \(T_x\), with the selected outer
+singletons in \(R\), all universal pairs and the arm in \(P\), and
+the unselected outer singletons and dummy in \(U\).
+A bad set instead induces \(T'_x\), moving the dummy to \(P\).
+Any stable tripartition has a maxcon inducing it and hence must
+be one of these candidates.
+
+For either candidate with index \(x\), a different outer assignment
+is dominated by one that matches \(x\), at the reliable tier.
+Different universal assignments are then incomparable at the middle
+tier. Fix \(y\). Under \(T_x\) the good marker \(A'\) makes the good
+set incomparable with bad and repair. A repair has all the bad
+middle-tier entries and the additional marker \(C\), so it dominates
+both bad sets. With no repair the two bad sets stay undominated,
+because their bottom-tier markers are incomparable. Thus \(T_x\)
+is strongly stable exactly when every \(y\) has a repairing \(z\).
+Under \(T'_x\) the good set remains undominated, and it induces
+\(T_x\), excluding strong stability of \(T'_x\).
+
+The sources therefore admit a strongly stable tripartition exactly
+when the input three-block quantified formula is true. All sources
+have size at most three and each formula is satisfiable, including
+\(C\) by the padding. Quantified truth with the prefix used above
+is \(\Sigma_3^{\mathrm P}\)-complete \cite{stockmeyer}. In the
+same sources, an inference query using a fresh atom is entailed by
+no consistent maxcon. Skeptical entailment for that query holds
+exactly when the input formula is false, giving
+\(\Pi_3^{\mathrm P}\)-hardness.
+
+\section{Hardness with a known stable integration}
+
+To make both answer cases nonvacuous, give every old formula \(f\)
+the guard \(q\lor f\), for a fresh bit \(q\), preserving source
+membership. Add two singleton marker sources \(\{q\},\{\neg q\}\)
+and ask the literal \(q\). Distinct tags may be retained.
+Every maxcon contains exactly one marker. In a strongly stable
+tripartition all maxcons agree on that marker, because a singleton
+source must be reliable when its formula is included and
+unreliable otherwise.
+
+The \(q=1\) branch has a stable tripartition with all guarded
+sources and \(\{q\}\) reliable, and \(\{\neg q\}\) unreliable.
+The reliable tier is consistent and every maxcon contains all
+of it. It already excludes \(\neg q\), so this tripartition is
+strongly stable and has one maxcon before the optional padding
+below. Any strongly stable \(q=1\) tripartition must have these
+same tiers, since every guarded formula belongs to its maxcons.
+
+For \(q=0\), take any old candidate \(T\) and put \(\{\neg q\}\)
+in its first tier and \(\{q\}\) in its last. Two \(q=0\)
+valuations compare exactly as their old counterparts, since
+the marker is common and the guarded bits read as the
+old formulas. No \(q=1\) valuation can dominate a \(q=0\)
+valuation: it misses the reliable marker \(\neg q\) in the
+first tier. If the old reliable tier is consistent, it is
+jointly consistent with \(\neg q\) after guarding, so every
+maxcon contains that marker and belongs to the \(q=0\) branch.
+Every strongly stable old \(T\) has a consistent reliable tier,
+because all its maxcons contain that tier. Conversely in a
+strongly stable \(q=0\) tripartition, all guarded reliable formulas
+and \(\neg q\) are in each maxcon. The reliable tier of the old
+restriction is therefore consistent. The agreement of the
+within-branch comparisons then gives strong stability of the
+old restriction and identifies all its maxcons by projection.
+
+Consequently the stable \(q=0\) branch exists exactly when the
+old sources admit strong stability. The new stable \(q=1\)
+branch is always present. The literal \(q\) is skeptically true
+exactly when the original quantified formula is false.
+
+Finally, add a source \(\{u,\neg u\}\) for a fresh \(u\).
+Every maxcon contains one of its literals, so every strongly
+stable tripartition places it in the middle tier. In that tier
+it simply duplicates every old maxcon, once for each literal.
+Indeed, a given \(u\) choice leaves every comparison unchanged
+among valuations with that choice. A different \(u\) choice
+cannot dominate through the middle or bottom tiers and an
+earlier strict dominance is available with the same \(u\)
+choice. The middle tier is now nonempty, and the two singleton
+markers ensure a nonempty first and last tier. The \(q=1\)
+stable tripartition remains explicitly known even with this
+padding. All formulas in the construction remain individually
+satisfiable, and the upper bound applies without modification.
+
+\section{Context and validation}
+
+Earlier fixed-priority entailment results such as Nebel's
+\cite{nebel} concern an externally supplied order. Liberatore's
+bipartition and weak-stability results do not impose the
+universal fixed-point condition on three tiers. His later
+all-profile merging rule \cite{absence} uses different
+priority semantics. The two inference reductions here depend
+on the same entrance gadget as the companion Q621 theorem.
+The marker proof makes the skeptical result nonvacuous.
+
+Internally reviewed, not peer reviewed. The finite replay checks
+small instances and the projection used in the marker construction.
+The general results are proved in the text. No proof-assistant
+formalization is included.
+
+Under human direction, ChatGPT Astra 6.2 (OpenAI) generated the
+discovery proof and its research packet. OpenAI Codex independently
+reviewed the mathematics and checked the finite replay.
+GPT-6.2 Sol (OpenAI) checked the literature and prepared the
+manuscript and illustrations. DannyExperiments maintains the
+repository and is the preferred citation identity. No AI system
+is proposed as an author.
+
+\begin{thebibliography}{9}
+\raggedright
+\bibitem{lib}
+P. Liberatore, \emph{Belief Integration and Source Reliability
+Assessment}, J. Artificial Intelligence Research \textbf{63}
+(2018), 87--143. \href{https://doi.org/10.1613/jair.1.11238}{doi:10.1613/jair.1.11238}.
+\bibitem{existence}
+DannyExperiments, \emph{The complexity of strongly stable source
+tripartition existence}, companion result Q621, version 1.0.0 (2026).
+\href{https://doi.org/10.5281/zenodo.24572371}{doi:10.5281/zenodo.24572371}.
+\bibitem{stockmeyer}
+L. J. Stockmeyer, \emph{The polynomial-time hierarchy},
+Theoretical Computer Science \textbf{3} (1976), 1--22.
+\href{https://doi.org/10.1016/0304-3975(76)90061-X}{Publisher record}.
+\bibitem{nebel}
+B. Nebel, \emph{Belief revision and default reasoning:
+Syntax-based approaches}, Proc. KR (1991), 417--428.
+\href{https://gki.informatik.uni-freiburg.de/papers/nebel-kr91.pdf}{Author PDF}.
+\bibitem{absence}
+P. Liberatore, \emph{Belief merging in absence of reliability
+information}, Synthese \textbf{200} (2022), 286.
+\href{https://doi.org/10.1007/s11229-022-03750-7}{doi:10.1007/s11229-022-03750-7}.
+\end{thebibliography}
+\end{document}

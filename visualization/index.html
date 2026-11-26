@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One stable branch is guaranteed</title>
+<style>
+:root{color-scheme:dark;--bg:#0d1825;--panel:#16273a;--ink:#edf5fb;--muted:#b0c6d9;--line:#38536a;--mint:#83e2ce;--amber:#ffc179;--blue:#8eb6d2}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:1rem/1.55 system-ui,sans-serif}
+main{width:min(100% - 2rem,51rem);margin:2rem auto 3rem}
+h1{font-size:clamp(2rem,6vw,3.2rem);line-height:1.12;letter-spacing:-.035em;margin:0}
+h2{font-size:1.13rem;margin:0 0 .4rem}
+header p,.muted{color:var(--muted)}
+p{margin:.6rem 0}
+section,details{border:1px solid var(--line);border-radius:1rem;background:var(--panel);margin:1rem 0;padding:1rem}
+.choices{display:flex;flex-wrap:wrap;gap:.5rem;margin:.65rem 0}
+button{background:#21394c;color:var(--ink);border:1px solid var(--line);font:inherit;min-height:2.75rem;cursor:pointer;padding:.35rem .65rem;border-radius:.55rem}
+button[aria-pressed=true]{background:var(--mint);color:#122b26;border-color:var(--mint);font-weight:680}
+button:focus-visible,input:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.summary{padding:.75rem;border-radius:.55rem;border:1px solid var(--line);background:#101e2e}
+.summary strong{color:var(--mint)}
+.scene{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.85rem}
+canvas{display:block;width:100%;height:18rem;border-radius:.55rem;background:#101e2e}
+.range{display:flex;gap:.65rem;align-items:center}
+input{width:100%;min-height:2.75rem;accent-color:var(--mint)}
+table{border-collapse:collapse;width:100%}
+th,td{padding:.4rem .35rem;border-bottom:1px solid var(--line);text-align:center}
+th:last-child,td:last-child{text-align:left}
+.good{color:var(--mint)}
+.bad{color:var(--amber)}
+.legend{display:flex;flex-wrap:wrap;gap:.25rem .75rem;font-size:.9rem}
+.legend span:first-child{color:var(--blue)}
+summary{cursor:pointer;color:var(--mint);font-weight:670}
+@media(max-width:640px){main{margin-top:1.2rem}section,details{padding:.75rem}.scene{display:flex;flex-direction:column}.figure,.repairTable{width:100%}canvas{height:13.75rem}}
+</style>
+</head>
+<body>
+<main>
+<header><h1>One stable branch is guaranteed</h1><p>Switch between two quantified matrices and see whether the additional marker is entailed by every stable integration.</p></header>
+<section aria-labelledby="worked">
+<h2 id="worked">Worked matrices</h2>
+<div class="choices" role="group" aria-label="Original matrix">
+<button id="complete" type="button" aria-pressed="true">φ = y ∨ z</button>
+<button id="blocked" type="button" aria-pressed="false">φ = y</button>
+</div>
+<div class="summary" aria-live="polite">
+<p><strong>q = 1 always gives a stable tripartition.</strong></p>
+<p id="branch">Four stable tripartitions also contain ¬q.</p>
+<p id="answer"><strong>Query q:</strong> Skeptical entailment fails.</p>
+</div>
+<div class="scene">
+<div class="figure">
+<canvas id="cube" role="img" aria-label="Cube with marker bit q and universal bits y and t"></canvas>
+<label class="range" for="angle">Rotate<input id="angle" type="range" min="0" max="360" value="26" aria-label="Rotation angle"></label>
+<div class="legend"><span>● Fallback</span><span class="good">● Repair</span><span class="bad">● Blocked</span></div>
+</div>
+<div class="repairTable">
+<h2>Repairs in the q = 0 branch</h2>
+<p class="muted">Fix outer assignment x = 0, s = 1. Check each universal choice in φ ∨ (s ∧ t) for some z.</p>
+<table>
+<thead><tr><th scope="col">y</th><th scope="col">t</th><th scope="col">Available?</th></tr></thead>
+<tbody id="repairs"></tbody>
+</table>
+<p class="muted">The q = 1 face always has the same stable order, independent of y and t.</p>
+</div>
+</div>
+</section>
+<details>
+<summary>Why a blocked repair matters</summary>
+<p>Each old formula f becomes q ∨ f. A reliable q marker gives a jointly consistent first tier that includes every guarded formula. A reliable ¬q marker instead recovers the old formulas.</p>
+<p>Within that false-marker branch, each successful repair eliminates both bad maxcon candidates by adding a middle-tier formula. A missing repair lets them survive and induce a different partition. For the blocked example, y = t = 0 defeats every outer choice, so only the true-marker order remains stable.</p>
+<p>The full construction adds a separate partial source {u, ¬u} so that all three tiers are occupied. The cube depicts the proof’s repair availability, with horizontal coordinate q and the other axes y and t.</p>
+</details>
+</main>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const canvas=$("cube"),ctx=canvas.getContext("2d");
+const bits=Array.from({length:8},(_,i)=>[(i>>2)&1,(i>>1)&1,i&1]);
+const edges=[];
+for(let i=0;i<8;i++)for(let j=i+1;j<8;j++){
+  if(bits[i].filter((value,k)=>bits[j][k]!==value).length===1)edges.push([i,j]);
+}
+let complete=true;
+const repair=(y,t)=>complete||Boolean(y||t);
+function paint(){
+  const {width,height}=canvas.getBoundingClientRect(),density=Math.min(devicePixelRatio||1,2);
+  canvas.width=Math.round(width*density);canvas.height=Math.round(height*density);ctx.scale(density,density);
+  const angle=Number($("angle").value)*Math.PI/180,pitch=.38,scale=Math.min(width,height)*.62;
+  function project(p){
+    let [x,y,z]=p.map(v=>v-.5);
+    [x,z]=[x*Math.cos(angle)+z*Math.sin(angle),-x*Math.sin(angle)+z*Math.cos(angle)];
+    [y,z]=[y*Math.cos(pitch)-z*Math.sin(pitch),y*Math.sin(pitch)+z*Math.cos(pitch)];
+    const k=5/(5-z);
+    return [width/2+x*scale*k,height/2-y*scale*k,z];
+  }
+  const p=bits.map(project),depth=([i,j])=>p[i][2]+p[j][2];
+  for(const edge of edges.slice().sort((a,b)=>depth(a)-depth(b))){
+    const [i,j]=edge;
+    ctx.strokeStyle=depth(edge)>0?"#6b95ae":"#2b445a";
+    ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(p[i][0],p[i][1]);ctx.lineTo(p[j][0],p[j][1]);ctx.stroke();
+  }
+  for(const i of bits.map((_,k)=>k).sort((a,b)=>p[a][2]-p[b][2])){
+    const [q,y,t]=bits[i], [x,yp]=p[i],good=repair(y,t);
+    const color=q?"#8eb6d2":good?"#83e2ce":"#ffc179";
+    ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,yp,6,0,Math.PI*2);ctx.fill();
+    if(!q&&!good){ctx.strokeStyle=color;ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,yp,10,0,Math.PI*2);ctx.stroke();}
+  }
+}
+function refresh(){
+  $("complete").setAttribute("aria-pressed",String(complete));$("blocked").setAttribute("aria-pressed",String(!complete));
+  $("branch").textContent=complete?"Four stable tripartitions also contain ¬q.":"The q = 0 branch has no strongly stable tripartition.";
+  $("answer").innerHTML="<strong>Query q:</strong> "+(complete?"Skeptical entailment fails.":"Skeptical entailment holds.");
+  $("repairs").innerHTML=bits.slice(0,4).map(([,y,t])=>"<tr><td>"+y+"</td><td>"+t+"</td><td class="+(repair(y,t)?"good>Yes":"bad>No")+"</td></tr>").join("");
+  paint();
+}
+$("complete").addEventListener("click",()=>{complete=true;refresh()});
+$("blocked").addEventListener("click",()=>{complete=false;refresh()});
+$("angle").addEventListener("input",paint);new ResizeObserver(paint).observe(canvas);refresh();
+</script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+256 Boolean matrices, both padding choices and both guard variants checked
+matrix y or z: repairs (1, 1, 1, 1), 4 false-marker stable orders, 1 true-marker stable order, skeptical q = False
+matrix y: repairs (0, 1, 1, 1), 0 false-marker stable orders, 1 true-marker stable order, skeptical q = True

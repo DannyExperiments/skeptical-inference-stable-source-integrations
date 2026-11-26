@@ -1,0 +1,18 @@
+cff-version: "1.2.0"
+message: "If you cite this release, please cite the version-specific DOI."
+title: "Skeptical inference from strongly stable source integrations"
+type: software
+authors:
+  - name: "DannyExperiments"
+doi: "10.5281/zenodo.24572374"
+version: "1.0.0"
+date-released: "2026-11-27"
+repository-code: "https://github.com/DannyExperiments/skeptical-inference-stable-source-integrations"
+url: "https://github.com/DannyExperiments/skeptical-inference-stable-source-integrations/releases/tag/v1.0.0"
+abstract: "Third-level polynomial-hierarchy completeness of skeptical inference over strongly stable source tripartitions, including hardness with a guaranteed integration."
+keywords:
+  - "skeptical inference"
+  - "belief integration"
+  - "strongly stable tripartitions"
+  - "maximal consistent subsets"
+  - "polynomial hierarchy"

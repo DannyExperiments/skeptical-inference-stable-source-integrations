@@ -1,0 +1,34 @@
+{
+  "title": "Skeptical inference from strongly stable source integrations",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "DannyExperiments"
+    }
+  ],
+  "keywords": [
+    "skeptical inference",
+    "belief integration",
+    "strongly stable tripartitions",
+    "maximal consistent subsets",
+    "polynomial hierarchy"
+  ],
+  "description": "<p>Skeptical consequence across all maximal consistent integrations of all strongly stable propositional source tripartitions is Pi-3-P-complete. Hardness persists for a literal query with a guaranteed strongly stable tripartition, disjoint sources of at most three formulas, individually satisfiable formulas, and all three tiers nonempty.</p><p>The proof characterizes maxcons by truth-set dominance at the first differing tier. A polynomial three-block witness predicate gives the upper bound. Hardness uses the shared quantified-Boolean gadget of the companion Q621 existence result. Replacing each formula f with q or f adds an always-stable true-marker branch, while the false-marker branch retains exactly the old strongly stable behavior. This gives nonvacuous hardness rather than relying on an empty set of integrations.</p><p>The result treats the three-tier strong fixed point in Liberatore's 2018 model. Earlier fixed-priority and weak-stability inferences concern different selection rules. The finite replay checks 256 small Boolean matrices, the guarded projection and the worked visual cases. Internally reviewed, not peer reviewed. No proof-assistant formalization is included.</p><p>Under human direction, ChatGPT Astra 6.2 (OpenAI) generated the discovery proof and its research packet. OpenAI Codex independently checked the mathematics and the finite replay. GPT-6.2 Sol (OpenAI) checked the literature and prepared the manuscript, extended replay and illustrations. DannyExperiments maintains the repository and is the preferred citation identity. No AI system is proposed as an author.</p><p>Companion existence proof: https://doi.org/10.5281/zenodo.24572371. Release v1.0.0. https://github.com/DannyExperiments/skeptical-inference-stable-source-integrations/releases/tag/v1.0.0</p>",
+  "license": "other-closed",
+  "notes": "All rights reserved. Publicly downloadable files are supplied without a repository-wide reuse license.",
+  "publication_date": "2026-11-27",
+  "version": "1.0.0",
+  "access_right": "open",
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/DannyExperiments/skeptical-inference-stable-source-integrations/releases/tag/v1.0.0",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    },
+    {
+      "identifier": "10.5281/zenodo.24572371",
+      "relation": "cites",
+      "resource_type": "software"
+    }
+  ]
+}

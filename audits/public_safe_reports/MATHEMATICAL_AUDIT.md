@@ -1,0 +1,5 @@
+# Mathematical review
+
+The reviewer checked that the first differing priority block decides strict truth-set dominance, and that prefix maximality is equivalent to being undominated. To refute skeptical entailment a guessed valuation must falsify the query and have no dominator. Strong stability of its guessed tripartition requires a dominator for every truth set of a different induced rank. These conditions fit an existential, universal and existential quantifier prefix.
+
+The common QBF reduction ensures that every stable candidate chooses consistent outer bits. It then survives exactly when every universal assignment admits a repair. The guarded reduction makes the true marker branch unconditionally stable and preserves all and only the old stable rankings on the false marker branch. The extra partial source duplicates maxcons and keeps every tier nonempty. Exact enumeration confirms the bounded cases. [Proofs](../../paper/manuscript.pdf) · [Replay](../../verification/logs/replay.txt)
